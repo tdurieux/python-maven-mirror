@@ -30,6 +30,26 @@ class SimpleHTTPProxy(BaseHTTPRequestHandler):
         log.debug("Setting %d mirrors: %s" % ( len(mirrors), " ".join( mirrors ) ) )
         cls.mirrors = mirrors
 
+    def do_HEAD(self):
+        path = self.path[1:]
+        if not os.path.isfile( path ):
+            for mirror in SimpleHTTPProxy.mirrors:
+                url = "%s%s" % ( mirror, path )
+                log.debug("Checking: %s" % ( url ) )
+                file = self.save_mirror_file( url, path )
+                if file is not False: 
+                    break
+
+        if not os.path.isfile( path ):
+            mimetype = mimetypes.guess_type(path)
+            self.send_response(200)
+            self.send_header('Content-type', mimetype[0])
+            self.end_headers()
+        else:
+            self.send_response(404)
+            self.end_headers()
+        return
+
     def do_GET(self):
         # path is already normalized by the underlying engine, so things like "../" are already resolved
         path = self.path[1:]
@@ -94,6 +114,21 @@ class SimpleHTTPProxy(BaseHTTPRequestHandler):
                 of.write( bytes )
         except Exception as ex:
             log.error("Unable to save local file %s: %s" % ( full_path, ex ) )
+            return False
+
+    def save_mirror_file(self, url, path):
+        try:
+            response = request.urlopen(url)
+        except error.HTTPError as e:
+            log.error("Not found on %s" % url)
+            return False
+        
+        if response.status == 200:
+            log.debug("Found on %s" % url)
+            with BytesIO() as f:
+                shutil.copyfileobj(response, f)
+                return self.save_local_file(path, f)
+        else:
             return False
 
     def serve_mirror_file(self, url):

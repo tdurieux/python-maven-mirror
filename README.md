@@ -28,5 +28,4 @@ Change the IP of the proxy to the IP of the Docker image.
         </mirror>
     </mirrors>
 </settings>
-´´´
 ```
