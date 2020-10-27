@@ -101,6 +101,8 @@ class SimpleHTTPProxy(BaseHTTPRequestHandler):
             return False
 
     def save_local_file( self, path, bytes ):
+        if ".xml" not in path or ".jar" not in path:
+            return False
         full_path = os.path.join( SimpleHTTPProxy.cache_path, path )
         try:
             # makedirs will fail if the directory already exists (fine, ignore)
@@ -117,6 +119,8 @@ class SimpleHTTPProxy(BaseHTTPRequestHandler):
             return False
 
     def save_mirror_file(self, url, path):
+        if ".xml" not in path or ".jar" not in path:
+            return False
         try:
             response = request.urlopen(url)
         except error.HTTPError as e:
