@@ -101,7 +101,7 @@ class SimpleHTTPProxy(BaseHTTPRequestHandler):
             return False
 
     def save_local_file( self, path, bytes ):
-        if ".xml" not in path or ".jar" not in path:
+        if ".pom" not in path or ".jar" not in path:
             return False
         full_path = os.path.join( SimpleHTTPProxy.cache_path, path )
         try:
