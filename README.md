@@ -15,7 +15,7 @@ USER_ID and GROUP_ID are used to preserve the permission on the created files.
 
 ### Maven settings (mvn-mirror-settings.xml)
 
-Change the IP of the proxy to the IP of the Docker image.
+Change the IP of the proxy to the IP of the Docker image .
 
 ```xml
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
@@ -23,7 +23,7 @@ Change the IP of the proxy to the IP of the Docker image.
         <mirror>
             <id>tiny-maven-mirror</id>
             <name>tiny-maven-mirror</name>
-            <url>http://10.10.11.10:5956/</url>
+            <url>http://172.17.0.1:5956/</url>
             <mirrorOf>maven2,central</mirrorOf>
         </mirror>
     </mirrors>
