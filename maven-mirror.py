@@ -101,7 +101,7 @@ class SimpleHTTPProxy(BaseHTTPRequestHandler):
             return False
 
     def save_local_file( self, path, bytes ):
-        if ".pom" not in path or ".jar" not in path:
+        if ".xml" not in path and ".pom" not in path and ".jar" not in path:
             return False
         full_path = os.path.join( SimpleHTTPProxy.cache_path, path )
         try:
@@ -119,8 +119,6 @@ class SimpleHTTPProxy(BaseHTTPRequestHandler):
             return False
 
     def save_mirror_file(self, url, path):
-        if ".xml" not in path or ".jar" not in path:
-            return False
         try:
             response = request.urlopen(url)
         except error.HTTPError as e:
