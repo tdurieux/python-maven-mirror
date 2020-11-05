@@ -129,7 +129,7 @@ class SimpleHTTPProxy(BaseHTTPRequestHandler):
             log.debug("Found on %s" % url)
             with BytesIO() as f:
                 shutil.copyfileobj(response, f)
-                return self.save_local_file(path, f)
+                return self.save_local_file(path, f.read())
         else:
             return False
 
